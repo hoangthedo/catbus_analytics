@@ -6,7 +6,7 @@
     ACCOUNT_ID: @account.id
   }
 
-  js_bundle :analytics, :plugin => :analysis_report 
+  js_bundle :analytics, :plugin => :catbus_analytics 
   @body_classes << 'full-width'
   add_crumb t(:analytics, "Analytics"), analytics_path(:account_id => @account.id)
 %>

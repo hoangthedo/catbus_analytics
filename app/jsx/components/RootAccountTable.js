@@ -20,7 +20,7 @@ export default class RootAccountTable extends React.Component {
 
     getRootAccountsList = (page) => {
         this.setState({openLoading: true})
-        $.get(`/accounts/${ENV.ANALYTICS.ACCOUNT_ID}/analytics/root_accounts`, {page: page}, (data) => {
+        $.get(`/api/v1/accounts/${ENV.ANALYTICS.ACCOUNT_ID}/analytics/root_accounts`, {page: page}, (data) => {
             this.setState({
                 rootAccounts: data,
                 openLoading: false
