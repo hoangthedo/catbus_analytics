@@ -1,12 +1,41 @@
 vi:
     analysis_report:
         components:
+            courses_table: 
+                course_id: ID
+                course_name: Tên khóa học
+                modules: Số modules
+                item: Số item
+                students: Số học viên
+                course_list: Khóa học
+                empty: Dữ liệu trống
+            question_bank_table:
+                name: Tên
+                position: Vị trí
+                course_name: Tên khóa học
+                questions: Số câu hỏi
+                account: Account
+                course: Course
+                question_bank_list: Ngân hàng câu hỏi
+                empty: Dữ liệu trống
+            modal_account_detail:
+                label: Thông tin chi tiết
+                empty: Dữ liệu trống
             tab_list:
                 general_report: Báo cáo tổng quát
                 detailed_report: Báo cáo chi tiết
                 chart: Biểu đồ
+                empty: Dữ liệu trống
+            sub_account_table:
+                id: Account ID
+                name: Tên
+                admin: Quản trị viên
+                admins: Số quản trị viên
+                courses: Số khóa học
+                sub_account_list: Đơn vị tuyến dưới
             detailed_report:
-                search: Tìm kiếm
+                search: Tìm 
+                empty: Dữ liệu trống
                 search_input:
                     placeholder: Tìm kiếm theo email
                     search_advanced:
@@ -15,7 +44,9 @@ vi:
                         hide: Ẩn
                         domain: Tên miền
                         account_id: Account ID
+                        school_name: Tên trường
             root_account:
+                empty: Dữ liệu trống
                 account_list: Danh sách các tài khoản
                 account_id: Account ID
                 next: Tiếp theo
@@ -25,7 +56,7 @@ vi:
                 domain: Tên miền
                 school_name: Tên trường
                 date_created: Ngày khởi tạo
-                detail: Xem chi tiết
+                detail: Chi tiết
                 loading: Đang tải
         index:
             general_report: Báo cáo tổng quát

@@ -4,12 +4,11 @@ module Api::V1::CatbusAnalytics
         json = account_json_report(account, user, session)
         if detail
             attributes = %w(id name parent_account_id root_account_id workflow_state uuid)
-            json['courses'] = account.courses.collect{|course| course_json(course, user, session)}
             json['question_banks'] = account.assessment_question_banks.collect{ |question_bank| question_bank_json(question_bank, user, session)}
-            account.courses.each do |course|
+            account.all_courses.active.order('id ASC').each do |course|
                 json['question_banks'] = json['question_banks'].concat(course.assessment_question_banks.collect{ |question_bank| question_bank_json(question_bank, user, session)})
             end
-            json['sub_accounts'] = Account.where(root_account_id: account.id).active.collect{|acc| account_json_report(acc, user, session)}
+            json['sub_accounts'] = Account.where(root_account_id: account.id).active.order('id ASC').collect{|acc| account_json_report(acc, user, session)}
         end
         json
     end
@@ -18,8 +17,10 @@ module Api::V1::CatbusAnalytics
         def account_json_report(account, user, session)
             attributes = %w(id name parent_account_id root_account_id workflow_state uuid)
             json = api_json(account, user, session, :only => attributes)
+            json['users'] = account.users.map{|a| a.email}
             json['email'] = account.users.map{|a| a.email}
             json['domain'] = account.catbus_account_domains.map{ |domain| domain.host}
+            json['courses'] = account.all_courses.active.order('id ASC').collect{|course| course_json(course, user, session)}
             date = I18n.l(account.created_at.localtime)
             json['created_at'] = date.remove(date.split(' ').pop())
             json
@@ -29,7 +30,7 @@ module Api::V1::CatbusAnalytics
             attributes = %w(id name account_id root_account_id course_code workflow_state uuid)
             json = api_json(course, user, session, :only => attributes)
             json['modules'] = course.context_modules.collect {|m| context_module_json(m, user, session)}
-            json['students'] = course.students.length
+            json['students'] = course.students.collect{|student| student_json(student, user, session)}
             json
         end
 

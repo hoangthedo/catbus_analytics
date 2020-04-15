@@ -1,11 +1,17 @@
 import I18n from 'i18n!analysis_report.components'
 import React from 'react'
+import { render } from "react-dom";
 import {View} from '@instructure/ui-layout'
 import Pagination, {PaginationButton} from '@instructure/ui-pagination/lib/components/Pagination'
 import Spinner from '@instructure/ui-elements/lib/components/Spinner'
+import ModalAccountDetail from './ModalAccountDetail'
+import PropTypes from 'prop-types'
 
 export default class RootAccountTable extends React.Component {
-    props
+    static propTypes = {
+        search: PropTypes.object,
+        is_enter: PropTypes.bool
+    }
 
     state = {
         currentPage: 0,
@@ -18,11 +24,21 @@ export default class RootAccountTable extends React.Component {
         this.getRootAccountsList(1)
     }
 
-    getRootAccountsList = (page) => {
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps, this.props)
+        if (Object.keys(nextProps.search).length !== 0){
+            if (nextProps.is_enter && this.props.is_enter !== nextProps.is_enter){
+                this.getRootAccountsList(1, nextProps.search)
+            }
+        }
+    }
+
+    getRootAccountsList = (page, search) => {
         this.setState({openLoading: true})
-        $.get(`/api/v1/accounts/${ENV.ANALYTICS.ACCOUNT_ID}/analytics/root_accounts`, {page: page}, (data) => {
+        $.get(`/api/v1/accounts/${ENV.ANALYTICS.ACCOUNT_ID}/analytics/root_accounts`, {page: page, search: search}, (data) => {
             this.setState({
-                rootAccounts: data,
+                rootAccounts: data.accounts,
+                totalPages: data.total_pages,
                 openLoading: false
             })
         })
@@ -53,6 +69,28 @@ export default class RootAccountTable extends React.Component {
         )
     }
 
+    componentModalAccountDetail = () => {
+        return render (
+            <ModalAccountDetail/>, document.getElementById('show_account_detail')
+        )
+    }
+
+    getRootAccountsDetails = (account_id, component) => {
+        $.get(`/api/v1/accounts/${ENV.ANALYTICS.ACCOUNT_ID}/analytics/root_accounts/${account_id}`, {detail: true}, (data) => {
+            component.setState({
+                open: true,
+                account_id: account_id,
+                data: data
+            })
+        })
+    }
+
+
+    handleOnclickAccountDetail = (e, account) => {
+        let component = this.componentModalAccountDetail()
+        this.getRootAccountsDetails(account.id, component)
+    }
+
     renderRowTable = (account) => {
         return (
             <tr>
@@ -61,7 +99,7 @@ export default class RootAccountTable extends React.Component {
                 <td>{account.email.map((email) => {return(<div>{email}</div>)})}</td>
                 <td style={nowrap}>{account.domain.map((domain) => {return(<div>{domain}</div>)})}</td>
                 <td style={nowrap}>{account.created_at}</td>
-                <td><a style={styleA}>{I18n.t('root_account.detail', 'Detail')}</a></td>
+                <td><a onClick={e => this.handleOnclickAccountDetail(e, account)} style={styleA}>{I18n.t('root_account.detail', 'Detail')}</a></td>
             </tr>
         )
     }
@@ -108,6 +146,7 @@ export default class RootAccountTable extends React.Component {
                         </div>
                     </div>
                 )}
+                <div id="show_account_detail"/>
             </View>
         )
       }
