@@ -49,7 +49,7 @@ class CatbusAnalyticsController < ApplicationController
         def search_email(users, keyword)
             return true unless keyword.present?
             return true if users.nil?
-            users = users.select{|usr| usr.email.include?(keyword)} 
+            users = users.select{|usr| usr.email.nil? ? false : usr.email.include?(keyword)} 
             users.length > 0
         end
 
