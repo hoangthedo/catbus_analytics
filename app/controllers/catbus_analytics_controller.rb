@@ -47,24 +47,24 @@ class CatbusAnalyticsController < ApplicationController
         end
     
         def search_email(users, keyword)
-            return true unless keyword.present?
+            return true if !keyword.present? or users.nil?
             users = users.select{|usr| usr.email.include?(keyword)} 
             users.length > 0
         end
 
         def search_domain(account, keyword)
-            return true unless keyword.present?
+            return true if !keyword.present? or account.nil?
             domain = account.catbus_account_domains.select{|acc| acc.host.include?(keyword)}
             domain.length > 0
         end
 
         def search_account_id(account, keyword)
-            return true unless keyword.present?
+            return true if !keyword.present? or account.nil?
             account.id.to_s == keyword
         end
 
         def search_school_name(account, keyword)
-            return true unless keyword.present?
+            return true if !keyword.present? or account.nil?
             account.name.include?(keyword)
         end
 end
