@@ -9,7 +9,7 @@
   js_bundle :analytics, :plugin => :catbus_analytics 
   # css_bundle :analytics, :plugin => :catbus_analytics
   @body_classes << 'full-width'
-  add_crumb t(:analytics, "Analytics"), analytics_path(:account_id => @account.id)
+  add_crumb t(:analytics, "Analytics"), catbus_analytics_path(:account_id => @account.id)
 %>
 
 <div id="analytics_body"></div>
