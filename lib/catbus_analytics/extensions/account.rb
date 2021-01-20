@@ -25,9 +25,9 @@ module CatbusAnalytics::Extensions::Account
       if active?
         new_tab = {
           id: TAB_ANALYTICS,
-          label: t("Analytics"),
-          css_class: 'analytics_plugin',
-          href: :analytics_path
+          label: t("Analytics-V2"),
+          css_class: 'analytics-v2_plugin',
+          href: :catbus_analytics_path
         }
         # insert right before the settings tab
         tabs.insert(tabs.index{|t| t[:id] == ::Account::TAB_SETTINGS}, new_tab)
